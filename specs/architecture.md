@@ -981,7 +981,7 @@ classDiagram
 ### 管理者フロントエンド
     * 別SPAとして実装
     * React
-    * Ant Design Pro (管理者向けUIコンポーネント)
+    * Ant Design (ReactのUIコンポーネントライブラリ)
     * TypeScript
     * 独立したデプロイとホスティング
     * 別ドメインまたはサブドメインでの提供
