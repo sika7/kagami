@@ -3,7 +3,7 @@
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Project Structure
-- Backend: Laravel PHP framework
+- Backend: Laravel PHP framework (PHP 8.x)
 - Frontend: React with Remix and TypeScript
 
 ## Build/Test Commands
@@ -12,6 +12,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `cd backend && php artisan test` - Run all tests
 - `cd backend && php artisan test --filter=TestName` - Run specific test
 - `cd backend && composer install` - Install dependencies
+- `cd backend && php artisan migrate` - Run database migrations
 
 ### Frontend (Remix)
 - `cd frontend && npm run dev` - Start development server
@@ -27,3 +28,4 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Naming:** Use camelCase for JavaScript/TypeScript, snake_case for PHP variables
 - **Imports:** Group and order imports by type (React, components, utilities)
 - **Types:** Always use proper TypeScript types; avoid `any`
+- **Components:** Use functional components with hooks in React
