@@ -1074,5 +1074,324 @@ WebSocketの導入(保留):
     リアルタイムの議論状況や協調編集機能のサポート
     複数ユーザーによるリアルタイム検証作業に有効
 
+## 状態遷移図
 
+### 投稿状態遷移
+
+```mermaid
+stateDiagram-v2
+    [*] --> 下書き: 作成開始
+    下書き --> 下書き: 自動保存
+    下書き --> 公開待機: 投稿
+    公開待機 --> 公開: 承認
+    公開待機 --> 修正依頼: モデレーション
+    修正依頼 --> 下書き: 編集
+    公開 --> 検証中: 検証リクエスト
+    検証中 --> 検証済み: 検証完了(肯定)
+    検証中 --> 検証不足: 検証完了(中立)
+    検証中 --> 検証否定: 検証完了(否定)
+    検証済み --> 公開: 時間経過
+    検証不足 --> 検証中: 追加検証
+    検証否定 --> 非表示: モデレーション
+    公開 --> 非表示: 違反報告
+    非表示 --> 削除: 管理者判断
+    非表示 --> 公開: 判断覆し
+    公開 --> 削除: ユーザー削除
+    公開 --> アーカイブ: 一定期間経過
+    公開 --> 固定: 重要投稿指定
+    固定 --> 公開: 固定解除
+```
+
+### ユーザー権限状態遷移
+
+```mermaid
+stateDiagram-v2
+    [*] --> 新規ユーザー: 登録完了
+    新規ユーザー --> 一般ユーザー: メール確認
+    一般ユーザー --> 信頼ユーザー: 貢献度達成
+    一般ユーザー --> 制限ユーザー: 違反行為
+    制限ユーザー --> 一般ユーザー: 制限解除
+    制限ユーザー --> 停止: 重大違反
+    信頼ユーザー --> 検証者: 検証精度達成
+    信頼ユーザー --> 一般ユーザー: 信頼度低下
+    検証者 --> 分野専門家: 専門分野実績
+    検証者 --> 信頼ユーザー: 検証精度低下
+    分野専門家 --> 検証者: 専門性低下
+    一般ユーザー --> モデレーター: 管理者任命
+    信頼ユーザー --> モデレーター: 管理者任命
+    検証者 --> モデレーター: 管理者任命
+    モデレーター --> 管理者: 上位任命
+    停止 --> [*]: アカウント削除
+    一般ユーザー --> [*]: 退会
+```
+
+### 検証プロセス状態遷移
+
+```mermaid
+stateDiagram-v2
+    [*] --> 検証要求: 検証リクエスト
+    検証要求 --> 検証割当: 検証者自動選定
+    検証割当 --> 検証待機: 検証者通知
+    検証待機 --> 検証進行中: 検証者作業開始
+    検証進行中 --> 第一次評価: 証拠検証完了
+    第一次評価 --> 追加検証要求: 証拠不足
+    追加検証要求 --> 検証待機: 追加検証者割当
+    第一次評価 --> 論拠評価: 証拠十分
+    論拠評価 --> 最終判定: 論理性評価
+    最終判定 --> ピアレビュー: 結論提出
+    ピアレビュー --> 結果確定: 合意形成
+    ピアレビュー --> 判定差戻: 意見相違
+    判定差戻 --> 第三者判定: 専門家招聘
+    第三者判定 --> 結果確定: 最終判断
+    結果確定 --> [*]: 検証結果公開
+```
+
+## シーケンス図
+
+### ユーザー登録から投稿作成までのフロー
+
+```mermaid
+sequenceDiagram
+    actor User
+    participant Frontend as フロントエンド
+    participant AuthAPI as 認証API
+    participant PostAPI as 投稿API
+    participant DB as データベース
+    participant Email as メールサービス
+    
+    User->>Frontend: 登録フォーム入力
+    Frontend->>Frontend: フォームバリデーション
+    Frontend->>AuthAPI: 登録リクエスト
+    AuthAPI->>DB: ユーザー情報保存
+    AuthAPI->>Email: 確認メール送信
+    Email-->>User: 確認メール受信
+    AuthAPI-->>Frontend: 登録成功レスポンス
+    Frontend-->>User: 確認メール通知表示
+    
+    User->>Email: 確認リンククリック
+    Email->>AuthAPI: メール確認
+    AuthAPI->>DB: アカウント有効化
+    AuthAPI-->>Frontend: リダイレクト
+    Frontend-->>User: ログインページ表示
+    
+    User->>Frontend: ログイン情報入力
+    Frontend->>AuthAPI: 認証リクエスト
+    AuthAPI->>DB: 認証情報検証
+    DB-->>AuthAPI: 検証結果
+    AuthAPI-->>Frontend: JWT発行
+    Frontend->>Frontend: JWT保存
+    Frontend-->>User: ダッシュボード表示
+    
+    User->>Frontend: 「投稿作成」クリック
+    Frontend-->>User: 投稿フォーム表示
+    User->>Frontend: 投稿内容入力
+    Frontend->>Frontend: 自動保存
+    User->>Frontend: ファイル添付
+    Frontend->>PostAPI: ファイルアップロード
+    PostAPI->>DB: メタデータ保存
+    PostAPI-->>Frontend: アップロード完了
+    User->>Frontend: 「公開」クリック
+    Frontend->>PostAPI: 投稿データ送信
+    PostAPI->>DB: 投稿データ保存
+    PostAPI->>DB: 関連タグ・カテゴリ保存
+    PostAPI-->>Frontend: 公開成功レスポンス
+    Frontend-->>User: 投稿確認画面表示
+```
+
+### 検証プロセスの詳細フロー
+
+```mermaid
+sequenceDiagram
+    actor Requester as 検証リクエスト者
+    actor Verifier as 検証者
+    actor PeerReviewer as ピアレビュアー
+    participant Frontend as フロントエンド
+    participant VerificationAPI as 検証API
+    participant NotificationSvc as 通知サービス
+    participant DB as データベース
+    
+    Requester->>Frontend: 検証リクエスト
+    Frontend->>VerificationAPI: 検証プロセス開始
+    VerificationAPI->>DB: 検証レコード作成
+    VerificationAPI->>DB: 適切な検証者検索
+    VerificationAPI->>NotificationSvc: 検証者へ通知
+    NotificationSvc-->>Verifier: 検証依頼通知
+    
+    Verifier->>Frontend: 検証作業開始
+    Frontend->>VerificationAPI: 作業状態更新
+    VerificationAPI->>DB: 状態更新
+    
+    Verifier->>Frontend: 証拠確認
+    Verifier->>Frontend: 外部情報参照
+    Verifier->>Frontend: 証拠評価入力
+    Frontend->>VerificationAPI: 証拠評価保存
+    VerificationAPI->>DB: 評価データ保存
+    
+    Verifier->>Frontend: 論拠検証
+    Frontend->>VerificationAPI: 論拠評価保存
+    VerificationAPI->>DB: 評価データ保存
+    
+    Verifier->>Frontend: 結論入力
+    Frontend->>VerificationAPI: 検証結果提出
+    VerificationAPI->>DB: 結果保存
+    VerificationAPI->>NotificationSvc: ピアレビュー依頼
+    NotificationSvc-->>PeerReviewer: レビュー依頼通知
+    
+    PeerReviewer->>Frontend: レビュー実施
+    Frontend->>VerificationAPI: レビュー結果送信
+    VerificationAPI->>DB: レビュー結果保存
+    
+    alt 合意形成
+        VerificationAPI->>DB: 結果確定
+        VerificationAPI->>NotificationSvc: 結果通知
+        NotificationSvc-->>Requester: 検証完了通知
+    else 意見相違
+        VerificationAPI->>DB: 追加専門家検索
+        VerificationAPI->>NotificationSvc: 追加レビュー依頼
+        Note over VerificationAPI,DB: 合意が得られるまで繰り返し
+    end
+    
+    VerificationAPI->>DB: 投稿ステータス更新
+    VerificationAPI->>DB: 重要度スコア更新
+    NotificationSvc-->>Requester: 最終結果通知
+```
+
+## エラーハンドリング仕様
+
+### エラーコード体系
+
+| エラーコード | 種類 | 説明 |
+|------------|------|------|
+| AUTH_001 | 認証エラー | 認証情報が無効 |
+| AUTH_002 | 認証エラー | アクセストークンの期限切れ |
+| AUTH_003 | 認証エラー | リフレッシュトークンの期限切れ |
+| AUTH_004 | 認証エラー | アカウントが無効化されている |
+| PERM_001 | 権限エラー | 操作に必要な権限がない |
+| PERM_002 | 権限エラー | リソースへのアクセス権限がない |
+| VAL_001 | バリデーションエラー | 必須フィールドの欠落 |
+| VAL_002 | バリデーションエラー | フィールド形式が不正 |
+| VAL_003 | バリデーションエラー | データ長の制限超過 |
+| RES_001 | リソースエラー | リソースが存在しない |
+| RES_002 | リソースエラー | 重複するリソース |
+| RATE_001 | レート制限エラー | APIリクエスト制限超過 |
+| SERV_001 | サーバーエラー | 内部サーバーエラー |
+| SERV_002 | サーバーエラー | 外部サービス連携失敗 |
+| MEDIA_001 | メディアエラー | ファイルサイズ超過 |
+| MEDIA_002 | メディアエラー | 未対応のファイル形式 |
+| MEDIA_003 | メディアエラー | ファイルアップロード失敗 |
+
+### エラーレスポンス形式
+
+```json
+{
+  "status": "error",
+  "code": "VAL_002",
+  "message": "メールアドレスの形式が正しくありません",
+  "details": {
+    "field": "email",
+    "reason": "invalid_format",
+    "provided": "example.com",
+    "expected": "user@example.com"
+  },
+  "request_id": "req_7a9c83d421",
+  "documentation_url": "https://api.domain.com/docs/errors#VAL_002"
+}
+```
+
+### 例外処理戦略
+
+1. **フロントエンド例外処理**
+   - グローバルエラーハンドラーの実装
+   - ネットワークエラーの自動リトライ（指数バックオフ）
+   - オフライン操作のキューイング
+   - フレンドリーなエラーメッセージの表示
+   - フォームバリデーションエラーのインライン表示
+
+2. **バックエンド例外処理**
+   - 構造化された例外クラス階層
+   - トランザクション管理による整合性確保
+   - 詳細なログ記録（エラーコンテキスト含む）
+   - センシティブ情報のフィルタリング
+   - 一貫したエラーレスポンス形式
+
+3. **回復戦略**
+   - 自動リカバリーメカニズム
+   - 段階的デグラデーション（一部機能のみ制限）
+   - フォールバックオプション（キャッシュデータ使用など）
+   - 非同期操作の再開ポイント
+   - エラー通知と監視アラート連携
+
+## キャッシュ戦略詳細
+
+### キャッシュレイヤー構成
+
+1. **ブラウザキャッシュ**
+   - 静的アセット: 1週間（Cache-Control: max-age=604800）
+   - API応答: 状況に応じたETags使用
+   - LocalStorage: ユーザー設定、ドラフト（容量制限あり）
+
+2. **CDNキャッシュ** （保留）
+   - 画像、動画、文書: 1ヶ月（エッジロケーション）
+   - 静的ページ: 1日（Surrogate-Control指定）
+   - キャッシュパージAPIによる即時無効化対応
+
+3. **アプリケーションキャッシュ**
+   - React Query: カスタムstaleTime設定
+   - Apollo Cache: GraphQLクエリ結果
+   - 投稿データ: 5分間有効（更新頻度低）
+   - ユーザープロフィール: 1時間有効
+   - 検索結果: 15分間有効
+
+4. **サーバーキャッシュ**
+   - Laravel Cache: DB負荷軽減
+   - 論理ツリー構造: 10分間有効
+   - 重要度計算結果: 1時間有効
+   - セッションストア: Redis使用
+
+### キャッシュキー命名規則
+
+```
+{サービス名}:{リソースタイプ}:{ID}:{バージョン}
+```
+
+例:
+- `sns:post:12345:v1` - 投稿データのキャッシュ
+- `sns:user:789:v2` - ユーザープロフィールのキャッシュ
+- `sns:tree:post_12345:v1` - 投稿12345を中心とした論理ツリー
+- `sns:search:keyword_science:v1` - 「science」の検索結果
+
+### 無効化戦略
+
+1. **明示的無効化**
+   - 投稿更新時: 特定キーと関連キーを無効化
+   - ユーザープロフィール更新時: 関連キャッシュ全て無効化
+   - 管理者アクション: 広範囲のキャッシュパージ
+
+2. **時間ベース期限切れ**
+   - TTL設定による自動期限切れ
+   - 更新頻度に応じた最適TTL設計
+   - バックグラウンド再生成（将来的機能）
+
+3. **バージョニング**
+   - リソース更新時にバージョン番号を変更
+   - 古いバージョンは参照されなくなり自動期限切れ
+   - データモデル変更時の互換性担保
+
+### キャッシュの整合性確保
+
+1. **Pub/Sub無効化**
+   - 更新イベント発行による関連キャッシュの無効化
+   - イベントペイロードに影響範囲情報含む
+
+2. **Write-Through戦略**
+   - データ更新時に同時にキャッシュも更新
+   - トランザクション内でのキャッシュ操作
+
+3. **コンディショナルリクエスト**
+   - If-None-Match / ETags活用
+   - 304 Not Modified応答によるトラフィック削減
+
+4. **キャッシュウォーミング**
+   - 定期的なバックグラウンドジョブによる再生成
+   - 高需要リソースの事前キャッシュ
 
