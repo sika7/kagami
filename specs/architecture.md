@@ -5,6 +5,26 @@
 ディベートの論理構造ネストして理論構造を可視化する。
 ノードの数が多くなればなるほどあらゆることで検証されているため情報が確かになる
 
+## システムコンテキスト図
+
+```mermaid
+flowchart TD
+    Browser["Web Browser\n(エンドユーザー/管理者インターフェース)"]
+    CDN["CDN\n(将来的に導入)"]
+    Frontend["フロントエンドアプリケーション\n(Remix + React + TypeScript)"]
+    Backend["バックエンドAPI\n(Laravel)"]
+    DB["データベース\n(MariaDB)"]
+    External["外部サービス\n- 翻訳サービス\n- 学術検索エンジン\n- ファクトチェック"]
+    
+    Browser --> CDN
+    CDN --> Frontend
+    Frontend --> Backend
+    Backend <--> External
+    Backend --> DB
+```
+
+この図は、システムの主要コンポーネントとその相互関係を示しています。ユーザーはWebブラウザを通じてシステムにアクセスし、フロントエンドアプリケーションがバックエンドAPIと通信します。システムはまた、翻訳サービスや学術検索エンジンなどの外部サービスと連携し、機能を拡張します。
+
 ## 主機能
 
 * 投稿システム
@@ -149,6 +169,241 @@ GDPRなどの法令遵守機能
 * モバイルファーストデザイン
 * 低速ネットワーク環境への最適化
 
+## データアーキテクチャ
+
+### 主要データモデル（ERD概略）
+
+```mermaid
+erDiagram
+    User ||--o{ Post : creates
+    User ||--o{ UserRole : has
+    Post ||--o{ Relationship : has
+    Post }o--o{ Community : belongs_to
+    
+    User {
+        int id PK
+        string name
+        string email
+        string password
+        json profile
+        json settings
+        datetime created_at
+        datetime updated_at
+    }
+    
+    Post {
+        int id PK
+        int user_id FK
+        int post_type_id
+        string title
+        text claim
+        text evidence
+        text reasoning
+        boolean sensitivity
+        datetime created_at
+        datetime updated_at
+    }
+    
+    Community {
+        int id PK
+        string name
+        text description
+        datetime created_at
+        datetime updated_at
+    }
+    
+    UserRole {
+        int id PK
+        int user_id FK
+        int role_id FK
+        datetime created_at
+        datetime updated_at
+    }
+    
+    Relationship {
+        int id PK
+        int from_post_id FK
+        int to_post_id FK
+        string relation_type
+        datetime created_at
+    }
+    
+    PostCommunity {
+        int post_id FK
+        int community_id FK
+    }
+```
+
+### キャッシュ戦略
+
+1. **フロントエンドキャッシュ**
+   - React Query を使用したクライアントサイドキャッシング
+   - Service Worker によるオフラインサポート（将来的に導入）
+
+2. **バックエンドキャッシュ**
+   - Redis キャッシュ（将来的に導入）
+   - 頻繁にアクセスされる投稿やツリー構造のキャッシュ
+   - 検索結果キャッシュ（15分有効）
+
+3. **データベースクエリキャッシュ**
+   - 複雑なクエリ結果のキャッシング（Laravel クエリキャッシュ）
+   - 重要度計算指標のインデックス化と事前計算
+
+### データフロー
+
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant F as Frontend
+    participant B as Backend API
+    participant C as Cache
+    participant DB as Database
+    
+    %% 投稿作成フロー
+    U->>F: 投稿フォーム入力
+    F->>F: バリデーション
+    F->>B: API呼び出し
+    B->>DB: データ保存
+    B->>B: インデックス更新
+    B->>C: キャッシュ無効化
+    B->>F: 成功レスポンス
+    F->>U: UI更新
+```
+
+#### 検索クエリフロー
+
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant F as Frontend
+    participant B as Backend API
+    participant C as Cache
+    participant DB as Database
+    
+    U->>F: 検索クエリ入力
+    F->>B: API呼び出し
+    B->>C: キャッシュチェック
+    
+    alt キャッシュヒット
+        C->>B: キャッシュデータ返却
+    else キャッシュミス
+        B->>DB: DB検索
+        DB->>B: 結果返却
+        B->>C: キャッシュ更新
+    end
+    
+    B->>F: 検索結果返却
+    F->>U: 結果表示
+```
+
+#### 論理構造表示フロー
+
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant F as Frontend
+    participant B as Backend API
+    participant C as Cache
+    participant DB as Database
+    
+    U->>F: 論理構造表示リクエスト
+    F->>B: GraphQLクエリ
+    B->>C: キャッシュチェック
+    
+    alt キャッシュヒット
+        C->>B: キャッシュデータ返却
+    else キャッシュミス
+        B->>DB: データ取得
+        DB->>B: データ返却
+        B->>B: 重要度計算
+        B->>C: キャッシュ保存
+    end
+    
+    B->>F: 構造データ返却
+    F->>F: ズームレベルに応じた表示最適化
+    F->>U: 論理構造表示
+```
+
+## モニタリングと運用
+
+### ログ収集・分析
+
+1. **アプリケーションログ**
+   - Laravel ログシステムを使用
+   - 重要なユーザーアクション、エラー、警告を記録
+   - 構造化ロギング形式（JSON）の採用
+
+2. **アクセスログ**
+   - Webサーバーログ（Nginxアクセスログ）
+   - ボット、クローラーの識別
+   - 異常アクセスパターンの検出
+
+3. **パフォーマンスメトリクス**
+   - API応答時間の記録
+   - DB操作時間の記録
+   - 重いクエリのトラッキング
+
+### 監視システム
+
+1. **稼働監視**
+   - 定期的なヘルスチェック
+   - サーバーリソース（CPU、メモリ、ディスク）の監視
+   - 自動再起動メカニズム
+
+2. **パフォーマンス監視**
+   - ページロード時間の測定
+   - API応答時間の測定
+   - データベース負荷の監視
+   - キャッシュヒット率の監視
+
+3. **ユーザー体験監視**
+   - リアルユーザーモニタリング（RUM）
+   - エラー率の監視
+   - フロントエンドパフォーマンス指標の収集
+
+### インシデント対応
+
+1. **アラート設定**
+   - 異常検知時のEメール/Slack通知
+   - エスカレーションフロー
+   - オンコール体制（将来的に）
+
+2. **トラブルシューティングガイド**
+   - 一般的な問題に対する対応手順書
+   - ログ分析ガイドライン
+   - 緊急時のロールバック手順
+
+## コンプライアンスと法的要件
+
+### データプライバシー
+
+1. **個人情報保護対策**
+   - 個人情報の最小限の収集
+   - 利用目的の明確化と同意取得
+   - アクセス制御とデータ暗号化
+
+2. **GDPR対応**
+   - データポータビリティ（エクスポート機能）
+   - 忘れられる権利（アカウント削除機能）
+   - データ処理の記録
+
+3. **Cookie ポリシー**
+   - 必要最小限のCookie使用
+   - オプトイン/オプトアウトの仕組み
+   - 明確な通知と同意取得
+
+### アクセシビリティコンプライアンス
+
+1. **WCAG 2.1 AA準拠**
+   - スクリーンリーダー対応
+   - キーボードナビゲーション
+   - コントラスト比の確保
+   - 代替テキストの提供
+
+2. **多言語対応**
+   - UIとシステムメッセージの日英対応
+   - 右から左への言語サポート（将来的に）
+
 ## 技術要件(システムがどのように実装されるか)
 
 ### 実装フェーズ
@@ -206,6 +461,59 @@ GDPRなどの法令遵守機能
 xserver(レンタルサーバー)
 
 使用可能なミドルウェア nginx PHP8 Cron
+
+## 開発・運用ライフサイクル
+
+### 開発環境
+
+1. **ローカル開発環境**
+   - Docker開発環境
+   - 開発用データベース (SQLite/MariaDB)
+   - Hot Reloading対応
+
+2. **開発プロセス**
+   - GitHubフローによるブランチ管理
+   - プルリクエストと強制的なコードレビュー
+   - 自動テスト実行（GitHub Actions）
+
+### テスト戦略
+
+1. **ユニットテスト**
+   - PHPUnit（Laravel）
+   - Jest（React/TypeScript）
+   - ビジネスロジックの網羅的テスト
+
+2. **統合テスト**
+   - API統合テスト（エンドポイントごと）
+   - フロントエンドコンポーネントテスト
+   - データフローの検証
+
+3. **E2Eテスト**
+   - Cypress を使用したブラウザテスト
+   - 主要ユーザーフロー（登録・投稿・検索）の検証
+   - レスポンシブデザインの検証
+
+4. **パフォーマンステスト**
+   - API負荷テスト
+   - 大規模データセットでの可視化テスト
+   - ブラウザパフォーマンス計測
+
+### デプロイメント
+
+1. **ステージング環境**
+   - 本番環境レプリカでのプレリリーステスト
+   - 手動QA検証
+   - ステークホルダーデモ
+
+2. **本番環境デプロイプロセス**
+   - Gitタグベースのリリースフロー
+   - ブルー/グリーンデプロイメント（将来的に）
+   - ゼロダウンタイムデプロイ（可能な限り）
+
+3. **リリース後監視**
+   - デプロイ直後の重点的モニタリング
+   - カナリアテスト（一部ユーザーへの段階的ロールアウト）
+   - 緊急ロールバック手順
 
 #### 使用するAPIパターン
 
