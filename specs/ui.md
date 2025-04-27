@@ -114,6 +114,18 @@ flowchart TD
 
 Ant Design
 
+### 可視化コンポーネント
+
+* **グラフ可視化**: 
+  * Three.js - WebGLベースのグラフレンダリング
+  * react-force-graph - ForceAtlasレイアウトと3D表示
+  * D3.js - データバインディングとSVGフォールバック
+
+* **UI仮想化**:
+  * react-window - パフォーマンス最適化されたリスト表示
+  * react-virtualized - 大規模データグリッド
+  * Intersection Observer API - 表示要素検出
+
 ## 画面仕様
 
 パソコン、タブレット、スマホを想定
