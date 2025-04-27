@@ -10,7 +10,7 @@ COPY package.json package-lock.json* ./
 RUN npm install
 
 # Expose port
-EXPOSE 3000
+EXPOSE 5173
 
 # Start development server
 CMD ["npm", "run", "dev"]
