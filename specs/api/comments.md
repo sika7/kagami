@@ -1,6 +1,7 @@
 # コメントAPI仕様
 
 ## コメント一覧取得 (List Comments)
+
 - **エンドポイント**: `GET /api/posts/{post_id}/comments`
 - **説明**: 投稿に対するコメント一覧取得
 - **パラメータ**:
@@ -35,6 +36,7 @@
   ```
 
 ## コメント作成 (Create Comment)
+
 - **エンドポイント**: `POST /api/posts/{post_id}/comments`
 - **説明**: 投稿に対するコメント作成
 - **ヘッダー**: `Authorization: Bearer {token}`
@@ -61,6 +63,7 @@
   ```
 
 ## コメント詳細取得 (Get Comment)
+
 - **エンドポイント**: `GET /api/comments/{id}`
 - **説明**: コメントの詳細取得
 - **パラメータ**:
@@ -83,6 +86,7 @@
   ```
 
 ## コメント更新 (Update Comment)
+
 - **エンドポイント**: `PUT /api/comments/{id}`
 - **説明**: コメントの更新
 - **ヘッダー**: `Authorization: Bearer {token}`
@@ -108,6 +112,7 @@
   ```
 
 ## コメント削除 (Delete Comment)
+
 - **エンドポイント**: `DELETE /api/comments/{id}`
 - **説明**: コメントの削除
 - **ヘッダー**: `Authorization: Bearer {token}`
@@ -121,6 +126,7 @@
   ```
 
 ## コメント返信一覧取得 (List Comment Replies)
+
 - **エンドポイント**: `GET /api/comments/{id}/replies`
 - **説明**: コメントに対する返信一覧取得
 - **パラメータ**:
@@ -151,3 +157,4 @@
     }
   }
   ```
+

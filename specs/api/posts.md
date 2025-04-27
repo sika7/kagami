@@ -1,6 +1,7 @@
 # 投稿API仕様
 
 ## 投稿一覧取得 (List Posts)
+
 - **エンドポイント**: `GET /api/posts`
 - **説明**: 投稿一覧の取得
 - **パラメータ**:
@@ -51,6 +52,7 @@
   ```
 
 ## 投稿詳細取得 (Get Post)
+
 - **エンドポイント**: `GET /api/posts/{id}`
 - **説明**: 特定の投稿詳細取得
 - **パラメータ**:
@@ -95,6 +97,7 @@
   ```
 
 ## 投稿作成 (Create Post)
+
 - **エンドポイント**: `POST /api/posts`
 - **説明**: 新規投稿の作成
 - **ヘッダー**: `Authorization: Bearer {token}`
@@ -126,6 +129,7 @@
   ```
 
 ## 投稿更新 (Update Post)
+
 - **エンドポイント**: `PUT /api/posts/{id}`
 - **説明**: 既存投稿の更新
 - **ヘッダー**: `Authorization: Bearer {token}`
@@ -158,6 +162,7 @@
   ```
 
 ## 投稿削除 (Delete Post)
+
 - **エンドポイント**: `DELETE /api/posts/{id}`
 - **説明**: 投稿の削除
 - **ヘッダー**: `Authorization: Bearer {token}`
@@ -171,6 +176,7 @@
   ```
 
 ## 投稿ツリー取得 (Get Post Tree)
+
 - **エンドポイント**: `GET /api/posts/{id}/tree`
 - **説明**: 投稿とその返信の階層構造を取得
 - **パラメータ**:
@@ -200,3 +206,4 @@
     ]
   }
   ```
+

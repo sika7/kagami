@@ -1,6 +1,7 @@
 # ブックマークAPI仕様
 
 ## ブックマーク作成 (Create Bookmark)
+
 - **エンドポイント**: `POST /api/posts/{post_id}/bookmark`
 - **説明**: 投稿をブックマークに追加
 - **ヘッダー**: `Authorization: Bearer {token}`
@@ -26,6 +27,7 @@
   ```
 
 ## ブックマーク削除 (Remove Bookmark)
+
 - **エンドポイント**: `DELETE /api/posts/{post_id}/bookmark`
 - **説明**: 投稿のブックマークを削除
 - **ヘッダー**: `Authorization: Bearer {token}`
@@ -39,6 +41,7 @@
   ```
 
 ## ブックマーク一覧取得 (List Bookmarks)
+
 - **エンドポイント**: `GET /api/bookmarks`
 - **説明**: ユーザーのブックマーク一覧を取得
 - **ヘッダー**: `Authorization: Bearer {token}`
@@ -77,6 +80,7 @@
   ```
 
 ## ブックマークコレクション作成 (Create Collection)
+
 - **エンドポイント**: `POST /api/bookmark-collections`
 - **説明**: ブックマークコレクションを作成
 - **ヘッダー**: `Authorization: Bearer {token}`
@@ -103,6 +107,7 @@
   ```
 
 ## ブックマークコレクション更新 (Update Collection)
+
 - **エンドポイント**: `PUT /api/bookmark-collections/{id}`
 - **説明**: ブックマークコレクションを更新
 - **ヘッダー**: `Authorization: Bearer {token}`
@@ -128,6 +133,7 @@
   ```
 
 ## ブックマークコレクション削除 (Delete Collection)
+
 - **エンドポイント**: `DELETE /api/bookmark-collections/{id}`
 - **説明**: ブックマークコレクションを削除
 - **ヘッダー**: `Authorization: Bearer {token}`
@@ -141,6 +147,7 @@
   ```
 
 ## ブックマークコレクション一覧取得 (List Collections)
+
 - **エンドポイント**: `GET /api/bookmark-collections`
 - **説明**: ユーザーのブックマークコレクション一覧を取得
 - **ヘッダー**: `Authorization: Bearer {token}`
@@ -162,6 +169,7 @@
   ```
 
 ## ブックマークコレクション詳細取得 (Get Collection)
+
 - **エンドポイント**: `GET /api/bookmark-collections/{id}`
 - **説明**: ブックマークコレクションの詳細を取得
 - **ヘッダー**: `Authorization: Bearer {token}`
@@ -203,3 +211,4 @@
     }
   }
   ```
+

@@ -25,6 +25,7 @@ APIはJWT（JSON Web Token）ベースの認証を使用します。
 4. アクセストークンの有効期限が切れた場合、リフレッシュトークンを使用して新しいトークンを取得
 
 #### ヘッダー形式
+
 ```
 Authorization: Bearer {your_access_token}
 ```
@@ -135,6 +136,7 @@ POST /auth/logout
 ```
 
 **リクエスト**
+
 ```
 Authorization: Bearer {your_access_token}
 ```
@@ -292,12 +294,12 @@ GET /users/{user_id}/posts
 
 **パラメータ**
 
-| パラメータ | タイプ   | 必須 | 説明 |
-|------------|----------|------|------|
-| page       | integer  | 任意 | ページ番号（デフォルト: 1） |
-| per_page   | integer  | 任意 | 1ページあたりの結果数（デフォルト: 20、最大: 100） |
-| post_type  | string   | 任意 | 投稿タイプでフィルタリング（カンマ区切りで複数指定可能） |
-| sort       | string   | 任意 | ソート順（created_at:desc, created_at:asc, importance:desc） |
+| パラメータ | タイプ  | 必須 | 説明                                                         |
+| ---------- | ------- | ---- | ------------------------------------------------------------ |
+| page       | integer | 任意 | ページ番号（デフォルト: 1）                                  |
+| per_page   | integer | 任意 | 1ページあたりの結果数（デフォルト: 20、最大: 100）           |
+| post_type  | string  | 任意 | 投稿タイプでフィルタリング（カンマ区切りで複数指定可能）     |
+| sort       | string  | 任意 | ソート順（created_at:desc, created_at:asc, importance:desc） |
 
 **レスポンス**
 
@@ -590,16 +592,16 @@ GET /posts
 
 **パラメータ**
 
-| パラメータ   | タイプ   | 必須 | 説明 |
-|--------------|----------|------|------|
-| page         | integer  | 任意 | ページ番号（デフォルト: 1） |
-| per_page     | integer  | 任意 | 1ページあたりの結果数（デフォルト: 20、最大: 100） |
-| post_type    | string   | 任意 | 投稿タイプでフィルタリング（カンマ区切りで複数指定可能） |
-| tags         | string   | 任意 | タグでフィルタリング（カンマ区切りで複数指定可能） |
-| community_id | integer  | 任意 | コミュニティIDでフィルタリング |
-| user_id      | integer  | 任意 | ユーザーIDでフィルタリング |
-| sort         | string   | 任意 | ソート順（created_at:desc, created_at:asc, importance:desc） |
-| feed_type    | string   | 任意 | フィードタイプ（home, trending, latest, following） |
+| パラメータ   | タイプ  | 必須 | 説明                                                         |
+| ------------ | ------- | ---- | ------------------------------------------------------------ |
+| page         | integer | 任意 | ページ番号（デフォルト: 1）                                  |
+| per_page     | integer | 任意 | 1ページあたりの結果数（デフォルト: 20、最大: 100）           |
+| post_type    | string  | 任意 | 投稿タイプでフィルタリング（カンマ区切りで複数指定可能）     |
+| tags         | string  | 任意 | タグでフィルタリング（カンマ区切りで複数指定可能）           |
+| community_id | integer | 任意 | コミュニティIDでフィルタリング                               |
+| user_id      | integer | 任意 | ユーザーIDでフィルタリング                                   |
+| sort         | string  | 任意 | ソート順（created_at:desc, created_at:asc, importance:desc） |
+| feed_type    | string  | 任意 | フィードタイプ（home, trending, latest, following）          |
 
 **レスポンス**
 
@@ -669,17 +671,17 @@ GET /search/posts
 
 **パラメータ**
 
-| パラメータ   | タイプ   | 必須 | 説明 |
-|--------------|----------|------|------|
-| q            | string   | 必須 | 検索クエリ |
-| page         | integer  | 任意 | ページ番号（デフォルト: 1） |
-| per_page     | integer  | 任意 | 1ページあたりの結果数（デフォルト: 20、最大: 100） |
-| post_type    | string   | 任意 | 投稿タイプでフィルタリング（カンマ区切りで複数指定可能） |
-| tags         | string   | 任意 | タグでフィルタリング（カンマ区切りで複数指定可能） |
-| community_id | integer  | 任意 | コミュニティIDでフィルタリング |
-| from_date    | string   | 任意 | この日付以降の投稿（ISO 8601形式） |
-| to_date      | string   | 任意 | この日付以前の投稿（ISO 8601形式） |
-| sort         | string   | 任意 | ソート順（relevance, created_at:desc, importance:desc） |
+| パラメータ   | タイプ  | 必須 | 説明                                                     |
+| ------------ | ------- | ---- | -------------------------------------------------------- |
+| q            | string  | 必須 | 検索クエリ                                               |
+| page         | integer | 任意 | ページ番号（デフォルト: 1）                              |
+| per_page     | integer | 任意 | 1ページあたりの結果数（デフォルト: 20、最大: 100）       |
+| post_type    | string  | 任意 | 投稿タイプでフィルタリング（カンマ区切りで複数指定可能） |
+| tags         | string  | 任意 | タグでフィルタリング（カンマ区切りで複数指定可能）       |
+| community_id | integer | 任意 | コミュニティIDでフィルタリング                           |
+| from_date    | string  | 任意 | この日付以降の投稿（ISO 8601形式）                       |
+| to_date      | string  | 任意 | この日付以前の投稿（ISO 8601形式）                       |
+| sort         | string  | 任意 | ソート順（relevance, created_at:desc, importance:desc）  |
 
 **レスポンス**
 
@@ -740,11 +742,11 @@ POST /media
 
 マルチパートフォームデータとしてファイルを送信
 
-| フィールド | タイプ  | 必須 | 説明 |
-|------------|---------|------|------|
-| file       | file    | 必須 | アップロードするファイル |
-| type       | string  | 必須 | ファイルタイプ（image, document, audio） |
-| caption    | string  | 任意 | ファイルの説明 |
+| フィールド | タイプ | 必須 | 説明                                     |
+| ---------- | ------ | ---- | ---------------------------------------- |
+| file       | file   | 必須 | アップロードするファイル                 |
+| type       | string | 必須 | ファイルタイプ（image, document, audio） |
+| caption    | string | 任意 | ファイルの説明                           |
 
 **レスポンス**
 
@@ -925,12 +927,12 @@ GET /posts/{post_id}/related
 
 **パラメータ**
 
-| パラメータ    | タイプ   | 必須 | 説明 |
-|---------------|----------|------|------|
-| page          | integer  | 任意 | ページ番号（デフォルト: 1） |
-| per_page      | integer  | 任意 | 1ページあたりの結果数（デフォルト: 20、最大: 100） |
-| relation_type | string   | 任意 | 関係タイプでフィルタリング（カンマ区切りで複数指定可能） |
-| direction     | string   | 任意 | 関係の方向（incoming, outgoing, both）デフォルト: both |
+| パラメータ    | タイプ  | 必須 | 説明                                                     |
+| ------------- | ------- | ---- | -------------------------------------------------------- |
+| page          | integer | 任意 | ページ番号（デフォルト: 1）                              |
+| per_page      | integer | 任意 | 1ページあたりの結果数（デフォルト: 20、最大: 100）       |
+| relation_type | string  | 任意 | 関係タイプでフィルタリング（カンマ区切りで複数指定可能） |
+| direction     | string  | 任意 | 関係の方向（incoming, outgoing, both）デフォルト: both   |
 
 **レスポンス**
 
@@ -1058,13 +1060,13 @@ GET /verification-requests
 
 **パラメータ**
 
-| パラメータ        | タイプ   | 必須 | 説明 |
-|-------------------|----------|------|------|
-| page              | integer  | 任意 | ページ番号（デフォルト: 1） |
-| per_page          | integer  | 任意 | 1ページあたりの結果数（デフォルト: 20、最大: 100） |
-| status            | string   | 任意 | ステータスでフィルタリング（pending, in_progress, completed） |
-| verification_type | string   | 任意 | 検証タイプでフィルタリング（evidence, reasoning, claim） |
-| domain            | string   | 任意 | 専門分野でフィルタリング |
+| パラメータ        | タイプ  | 必須 | 説明                                                          |
+| ----------------- | ------- | ---- | ------------------------------------------------------------- |
+| page              | integer | 任意 | ページ番号（デフォルト: 1）                                   |
+| per_page          | integer | 任意 | 1ページあたりの結果数（デフォルト: 20、最大: 100）            |
+| status            | string  | 任意 | ステータスでフィルタリング（pending, in_progress, completed） |
+| verification_type | string  | 任意 | 検証タイプでフィルタリング（evidence, reasoning, claim）      |
+| domain            | string  | 任意 | 専門分野でフィルタリング                                      |
 
 **レスポンス**
 
@@ -1123,13 +1125,13 @@ GET /communities
 
 **パラメータ**
 
-| パラメータ  | タイプ   | 必須 | 説明 |
-|-------------|----------|------|------|
-| page        | integer  | 任意 | ページ番号（デフォルト: 1） |
-| per_page    | integer  | 任意 | 1ページあたりの結果数（デフォルト: 20、最大: 100） |
-| sort        | string   | 任意 | ソート順（popularity, name, created_at:desc） |
-| category_id | integer  | 任意 | カテゴリIDでフィルタリング |
-| q           | string   | 任意 | 検索クエリ |
+| パラメータ  | タイプ  | 必須 | 説明                                               |
+| ----------- | ------- | ---- | -------------------------------------------------- |
+| page        | integer | 任意 | ページ番号（デフォルト: 1）                        |
+| per_page    | integer | 任意 | 1ページあたりの結果数（デフォルト: 20、最大: 100） |
+| sort        | string  | 任意 | ソート順（popularity, name, created_at:desc）      |
+| category_id | integer | 任意 | カテゴリIDでフィルタリング                         |
+| q           | string  | 任意 | 検索クエリ                                         |
 
 **レスポンス**
 
@@ -1263,13 +1265,13 @@ GET /communities/{community_id}/posts
 
 **パラメータ**
 
-| パラメータ | タイプ   | 必須 | 説明 |
-|------------|----------|------|------|
-| page       | integer  | 任意 | ページ番号（デフォルト: 1） |
-| per_page   | integer  | 任意 | 1ページあたりの結果数（デフォルト: 20、最大: 100） |
-| post_type  | string   | 任意 | 投稿タイプでフィルタリング（カンマ区切りで複数指定可能） |
-| sort       | string   | 任意 | ソート順（created_at:desc, created_at:asc, importance:desc） |
-| tags       | string   | 任意 | タグでフィルタリング（カンマ区切りで複数指定可能） |
+| パラメータ | タイプ  | 必須 | 説明                                                         |
+| ---------- | ------- | ---- | ------------------------------------------------------------ |
+| page       | integer | 任意 | ページ番号（デフォルト: 1）                                  |
+| per_page   | integer | 任意 | 1ページあたりの結果数（デフォルト: 20、最大: 100）           |
+| post_type  | string  | 任意 | 投稿タイプでフィルタリング（カンマ区切りで複数指定可能）     |
+| sort       | string  | 任意 | ソート順（created_at:desc, created_at:asc, importance:desc） |
+| tags       | string  | 任意 | タグでフィルタリング（カンマ区切りで複数指定可能）           |
 
 **レスポンス**
 
@@ -1328,11 +1330,11 @@ GET /notifications
 
 **パラメータ**
 
-| パラメータ  | タイプ   | 必須 | 説明 |
-|-------------|----------|------|------|
-| page        | integer  | 任意 | ページ番号（デフォルト: 1） |
-| per_page    | integer  | 任意 | 1ページあたりの結果数（デフォルト: 20、最大: 100） |
-| read_status | string   | 任意 | 既読状態でフィルタリング（read, unread, all）デフォルト: all |
+| パラメータ  | タイプ  | 必須 | 説明                                                         |
+| ----------- | ------- | ---- | ------------------------------------------------------------ |
+| page        | integer | 任意 | ページ番号（デフォルト: 1）                                  |
+| per_page    | integer | 任意 | 1ページあたりの結果数（デフォルト: 20、最大: 100）           |
+| read_status | string  | 任意 | 既読状態でフィルタリング（read, unread, all）デフォルト: all |
 
 **レスポンス**
 
@@ -1429,10 +1431,10 @@ GET /tags/popular
 
 **パラメータ**
 
-| パラメータ    | タイプ   | 必須 | 説明 |
-|---------------|----------|------|------|
-| limit         | integer  | 任意 | 取得数（デフォルト: 20、最大: 100） |
-| community_id  | integer  | 任意 | コミュニティIDでフィルタリング |
+| パラメータ   | タイプ  | 必須 | 説明                                |
+| ------------ | ------- | ---- | ----------------------------------- |
+| limit        | integer | 任意 | 取得数（デフォルト: 20、最大: 100） |
+| community_id | integer | 任意 | コミュニティIDでフィルタリング      |
 
 **レスポンス**
 
@@ -1464,13 +1466,13 @@ GET /tags/{tag_name}/posts
 
 **パラメータ**
 
-| パラメータ   | タイプ   | 必須 | 説明 |
-|--------------|----------|------|------|
-| page         | integer  | 任意 | ページ番号（デフォルト: 1） |
-| per_page     | integer  | 任意 | 1ページあたりの結果数（デフォルト: 20、最大: 100） |
-| post_type    | string   | 任意 | 投稿タイプでフィルタリング（カンマ区切りで複数指定可能） |
-| sort         | string   | 任意 | ソート順（created_at:desc, created_at:asc, importance:desc） |
-| community_id | integer  | 任意 | コミュニティIDでフィルタリング |
+| パラメータ   | タイプ  | 必須 | 説明                                                         |
+| ------------ | ------- | ---- | ------------------------------------------------------------ |
+| page         | integer | 任意 | ページ番号（デフォルト: 1）                                  |
+| per_page     | integer | 任意 | 1ページあたりの結果数（デフォルト: 20、最大: 100）           |
+| post_type    | string  | 任意 | 投稿タイプでフィルタリング（カンマ区切りで複数指定可能）     |
+| sort         | string  | 任意 | ソート順（created_at:desc, created_at:asc, importance:desc） |
+| community_id | integer | 任意 | コミュニティIDでフィルタリング                               |
 
 **レスポンス**
 
@@ -1532,7 +1534,11 @@ GraphQLエンドポイント: `/graphql`
 #### 投稿ツリー取得
 
 ```graphql
-query GetPostTree($postId: ID!, $depth: Int = 3, $includeRelatedPosts: Boolean = true) {
+query GetPostTree(
+  $postId: ID!
+  $depth: Int = 3
+  $includeRelatedPosts: Boolean = true
+) {
   post(id: $postId) {
     id
     title
@@ -1555,7 +1561,7 @@ query GetPostTree($postId: ID!, $depth: Int = 3, $includeRelatedPosts: Boolean =
       question
     }
     userReaction
-    
+
     # 関連する投稿（親子関係と多対多関係）
     relatedPosts(depth: $depth) {
       nodes {
@@ -1586,29 +1592,29 @@ query GetPostTree($postId: ID!, $depth: Int = 3, $includeRelatedPosts: Boolean =
 
 ```graphql
 query ComplexSearch(
-  $query: String,
-  $postTypes: [String],
-  $tags: [String],
-  $communityIds: [ID],
-  $fromDate: DateTime,
-  $toDate: DateTime,
-  $verificationStatus: String,
-  $importanceScoreMin: Float,
-  $sort: String = "relevance",
-  $page: Int = 1,
+  $query: String
+  $postTypes: [String]
+  $tags: [String]
+  $communityIds: [ID]
+  $fromDate: DateTime
+  $toDate: DateTime
+  $verificationStatus: String
+  $importanceScoreMin: Float
+  $sort: String = "relevance"
+  $page: Int = 1
   $perPage: Int = 20
 ) {
   search(
-    query: $query,
-    postTypes: $postTypes,
-    tags: $tags,
-    communityIds: $communityIds,
-    fromDate: $fromDate,
-    toDate: $toDate,
-    verificationStatus: $verificationStatus,
-    importanceScoreMin: $importanceScoreMin,
-    sort: $sort,
-    page: $page,
+    query: $query
+    postTypes: $postTypes
+    tags: $tags
+    communityIds: $communityIds
+    fromDate: $fromDate
+    toDate: $toDate
+    verificationStatus: $verificationStatus
+    importanceScoreMin: $importanceScoreMin
+    sort: $sort
+    page: $page
     perPage: $perPage
   ) {
     posts {
@@ -1649,19 +1655,19 @@ query ComplexSearch(
 
 ```graphql
 query GetNetworkView(
-  $centralPostId: ID!,
-  $maxNodes: Int = 100,
-  $depth: Int = 2,
-  $includeParents: Boolean = true,
-  $includeChildren: Boolean = true,
+  $centralPostId: ID!
+  $maxNodes: Int = 100
+  $depth: Int = 2
+  $includeParents: Boolean = true
+  $includeChildren: Boolean = true
   $includeRelated: Boolean = true
 ) {
   networkView(
-    centralPostId: $centralPostId,
-    maxNodes: $maxNodes,
-    depth: $depth,
-    includeParents: $includeParents,
-    includeChildren: $includeChildren,
+    centralPostId: $centralPostId
+    maxNodes: $maxNodes
+    depth: $depth
+    includeParents: $includeParents
+    includeChildren: $includeChildren
     includeRelated: $includeRelated
   ) {
     nodes {
@@ -1716,18 +1722,18 @@ APIレスポンスのエラー形式:
 
 ### 主要なエラーコード
 
-| コード                 | 説明                                    | HTTPステータス |
-|------------------------|----------------------------------------|--------------|
-| AUTHENTICATION_ERROR   | 認証エラー（未認証、トークン期限切れなど）   | 401          |
-| AUTHORIZATION_ERROR    | 権限エラー（アクセス権限がない）           | 403          |
-| RESOURCE_NOT_FOUND     | リソースが存在しない                     | 404          |
-| VALIDATION_ERROR       | 入力値バリデーションエラー               | 422          |
-| RATE_LIMIT_EXCEEDED    | APIレート制限超過                        | 429          |
-| SERVER_ERROR           | サーバー内部エラー                       | 500          |
-| SERVICE_UNAVAILABLE    | サービス一時停止中                       | 503          |
-| DUPLICATE_ENTRY        | 重複エントリー                           | 409          |
-| INVALID_REQUEST        | 不正なリクエスト                         | 400          |
-| MEDIA_UPLOAD_ERROR     | メディアアップロードエラー                | 422          |
+| コード               | 説明                                       | HTTPステータス |
+| -------------------- | ------------------------------------------ | -------------- |
+| AUTHENTICATION_ERROR | 認証エラー（未認証、トークン期限切れなど） | 401            |
+| AUTHORIZATION_ERROR  | 権限エラー（アクセス権限がない）           | 403            |
+| RESOURCE_NOT_FOUND   | リソースが存在しない                       | 404            |
+| VALIDATION_ERROR     | 入力値バリデーションエラー                 | 422            |
+| RATE_LIMIT_EXCEEDED  | APIレート制限超過                          | 429            |
+| SERVER_ERROR         | サーバー内部エラー                         | 500            |
+| SERVICE_UNAVAILABLE  | サービス一時停止中                         | 503            |
+| DUPLICATE_ENTRY      | 重複エントリー                             | 409            |
+| INVALID_REQUEST      | 不正なリクエスト                           | 400            |
+| MEDIA_UPLOAD_ERROR   | メディアアップロードエラー                 | 422            |
 
 ## バージョニング
 
@@ -1762,11 +1768,13 @@ X-RateLimit-Reset: 1682354987
 ## 変更履歴
 
 ### v1.0.0（初期リリース）
+
 - 基本的なRESTful APIエンドポイント
 - 認証システム
 - 投稿、ユーザー、メディア関連のエンドポイント
 
 ### v1.1.0（予定）
+
 - GraphQL APIの追加
 - 検証システムの拡張
 - パフォーマンス最適化

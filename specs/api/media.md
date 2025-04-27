@@ -1,6 +1,7 @@
 # メディアAPI仕様
 
 ## メディアアップロード (Upload Media)
+
 - **エンドポイント**: `POST /api/media`
 - **説明**: 各種メディアファイルのアップロード
 - **ヘッダー**: `Authorization: Bearer {token}`
@@ -25,6 +26,7 @@
   ```
 
 ## メディア取得 (Get Media)
+
 - **エンドポイント**: `GET /api/media/{id}`
 - **説明**: 特定メディアの情報取得
 - **パラメータ**:
@@ -44,6 +46,7 @@
   ```
 
 ## メディア削除 (Delete Media)
+
 - **エンドポイント**: `DELETE /api/media/{id}`
 - **説明**: メディアの削除
 - **ヘッダー**: `Authorization: Bearer {token}`
@@ -57,6 +60,7 @@
   ```
 
 ## URL魚拓生成 (Create Web Archive)
+
 - **エンドポイント**: `POST /api/media/web-archive`
 - **説明**: 指定URLの魚拓（スナップショット）を作成
 - **ヘッダー**: `Authorization: Bearer {token}`
@@ -78,6 +82,7 @@
   ```
 
 ## 投稿メディア一覧取得 (Get Post Media)
+
 - **エンドポイント**: `GET /api/posts/{post_id}/media`
 - **説明**: 特定投稿に紐づくメディア一覧取得
 - **パラメータ**:
@@ -97,3 +102,4 @@
     ]
   }
   ```
+

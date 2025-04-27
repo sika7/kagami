@@ -1,6 +1,7 @@
 # 検索API仕様 (GraphQL)
 
 ## GraphQLエンドポイント
+
 - **エンドポイント**: `POST /api/graphql`
 - **説明**: GraphQLによる高度な検索・取得
 
@@ -136,34 +137,27 @@ type Query {
   # ユーザー関連
   user(id: ID!): User
   users(first: Int, page: Int): UserConnection
-  
+
   # 投稿関連
   post(id: ID!): Post
   posts(
-    first: Int,
-    page: Int,
-    filter: PostFilter,
+    first: Int
+    page: Int
+    filter: PostFilter
     orderBy: PostOrder
   ): PostConnection
-  
+
   # ツリー関連
-  postTree(
-    root_id: ID!,
-    depth: Int
-  ): Post
-  
+  postTree(root_id: ID!, depth: Int): Post
+
   # 関連投稿
-  relatedPosts(
-    post_id: ID!,
-    first: Int,
-    page: Int
-  ): PostConnection
+  relatedPosts(post_id: ID!, first: Int, page: Int): PostConnection
 
   # 検索
   search(
-    keyword: String!,
-    types: [String],
-    first: Int,
+    keyword: String!
+    types: [String]
+    first: Int
     page: Int
   ): PostConnection
 }
@@ -172,19 +166,14 @@ type Query {
 ## クエリ例
 
 ### 投稿検索
+
 ```graphql
 query {
   posts(
-    first: 10,
-    page: 1,
-    filter: {
-      type: "問題提示",
-      keyword: "環境問題"
-    },
-    orderBy: {
-      field: CREATED_AT,
-      direction: DESC
-    }
+    first: 10
+    page: 1
+    filter: {type: "問題提示", keyword: "環境問題"}
+    orderBy: {field: CREATED_AT, direction: DESC}
   ) {
     edges {
       node {
@@ -217,12 +206,10 @@ query {
 ```
 
 ### 投稿ツリー取得
+
 ```graphql
 query {
-  postTree(
-    root_id: "1",
-    depth: 3
-  ) {
+  postTree(root_id: "1", depth: 3) {
     id
     type
     claim
@@ -261,13 +248,10 @@ query {
 ```
 
 ### 関連投稿取得
+
 ```graphql
 query {
-  relatedPosts(
-    post_id: "1",
-    first: 10,
-    page: 1
-  ) {
+  relatedPosts(post_id: "1", first: 10, page: 1) {
     edges {
       node {
         id
@@ -286,12 +270,13 @@ query {
 ```
 
 ### キーワード検索
+
 ```graphql
 query {
   search(
-    keyword: "環境問題",
-    types: ["問題提示", "解決策提示"],
-    first: 10,
+    keyword: "環境問題"
+    types: ["問題提示", "解決策提示"]
+    first: 10
     page: 1
   ) {
     edges {

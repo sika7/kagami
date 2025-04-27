@@ -1,6 +1,7 @@
 # リアクションAPI仕様
 
 ## リアクション追加 (Add Reaction)
+
 - **エンドポイント**: `POST /api/posts/{post_id}/reactions`
 - **説明**: 投稿へのリアクションを追加
 - **ヘッダー**: `Authorization: Bearer {token}`
@@ -24,6 +25,7 @@
   ```
 
 ## リアクション削除 (Remove Reaction)
+
 - **エンドポイント**: `DELETE /api/posts/{post_id}/reactions/{type}`
 - **説明**: 投稿へのリアクションを削除
 - **ヘッダー**: `Authorization: Bearer {token}`
@@ -38,6 +40,7 @@
   ```
 
 ## リアクション一覧取得 (Get Reactions)
+
 - **エンドポイント**: `GET /api/posts/{post_id}/reactions`
 - **説明**: 投稿に対するリアクション一覧を取得
 - **パラメータ**:
@@ -70,6 +73,7 @@
   ```
 
 ## ユーザーリアクション取得 (Get User Reaction)
+
 - **エンドポイント**: `GET /api/posts/{post_id}/reactions/user`
 - **説明**: ログインユーザーの投稿に対するリアクションを取得
 - **ヘッダー**: `Authorization: Bearer {token}`
@@ -84,6 +88,7 @@
   ```
 
 ## リアクション集計 (Get Reaction Counts)
+
 - **エンドポイント**: `GET /api/posts/{post_id}/reactions/counts`
 - **説明**: 投稿に対するリアクション数の集計を取得
 - **パラメータ**:
