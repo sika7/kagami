@@ -80,6 +80,23 @@ services:
     networks:
       - kagami-network
 
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    platform: linux/amd64
+    container_name: kagami-phpmyadmin
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_USER: kagami
+      PMA_PASSWORD: kagami_password
+      PMA_PMADB: kagami
+    ports:
+      - '8080:80'
+    networks:
+      - kagami-network
+    depends_on:
+      - db
+
   # キャッシュ (Redis)
   redis:
     image: redis:alpine
@@ -96,4 +113,3 @@ networks:
 
 volumes:
   kagami-db-data:
-
