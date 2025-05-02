@@ -3,6 +3,8 @@ import { Form, Link, useActionData, useNavigation, useNavigate } from "@remix-ru
 import { useAuth } from "~/contexts/auth-context";
 import type { ActionArgs, MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
+import FormInput from "~/components/FormInput";
+import Button from "~/components/Button";
 
 export const meta: MetaFunction = () => {
   return [
@@ -51,20 +53,20 @@ export default function Login() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-12 sm:px-6 lg:px-8">
+    <div className="flex min-h-screen items-center justify-center bg-light-grey px-4 py-12 sm:px-6 lg:px-8">
       <div className="w-full max-w-md space-y-8">
         <div>
           <div className="flex justify-center">
             <img className="h-16 w-auto" src="/logo-light.png" alt="ロゴ" />
           </div>
-          <h2 className="mt-6 text-center text-3xl font-semibold text-gray-900">
+          <h2 className="mt-6 text-center text-h2 text-dark-blue">
             アカウントにログイン
           </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
+          <p className="mt-2 text-center text-small text-dark-blue/70">
             または{" "}
             <Link
               to="/register"
-              className="font-medium text-blue-600 hover:text-blue-500"
+              className="font-medium text-sky-blue hover:text-sky-blue/80"
             >
               新規登録
             </Link>
@@ -72,56 +74,48 @@ export default function Login() {
         </div>
 
         {error && (
-          <div className="rounded-md bg-red-50 p-4">
+          <div className="rounded-md bg-soft-coral/10 p-4">
             <div className="flex">
               <div className="ml-3">
-                <h3 className="text-sm font-medium text-red-800">エラー</h3>
-                <div className="mt-2 text-sm text-red-700">{error}</div>
+                <h3 className="text-sm font-medium text-soft-coral">エラー</h3>
+                <div className="mt-2 text-sm text-soft-coral/90">{error}</div>
               </div>
             </div>
           </div>
         )}
 
         <Form className="mt-8 space-y-6" method="post" onSubmit={handleSubmit}>
-          <div className="-space-y-px rounded-md shadow-sm">
-            <div>
-              <label htmlFor="email" className="sr-only">
-                メールアドレス
-              </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                autoComplete="email"
-                required
-                className="relative block w-full rounded-t-md border-0 py-3 px-4 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm"
-                placeholder="メールアドレス"
-              />
-            </div>
-            <div>
-              <label htmlFor="password" className="sr-only">
-                パスワード
-              </label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                autoComplete="current-password"
-                required
-                className="relative block w-full rounded-b-md border-0 py-3 px-4 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm"
-                placeholder="パスワード"
-              />
-            </div>
+          <div className="space-y-4">
+            <FormInput
+              id="email"
+              name="email"
+              type="email"
+              autoComplete="email"
+              required
+              label="メールアドレス"
+              placeholder="メールアドレス"
+            />
+            <FormInput
+              id="password"
+              name="password"
+              type="password"
+              autoComplete="current-password"
+              required
+              label="パスワード"
+              placeholder="パスワード"
+            />
           </div>
 
           <div>
-            <button
+            <Button
               type="submit"
               disabled={isLoading}
-              className="group relative flex w-full justify-center rounded-md bg-blue-600 px-4 py-3 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:bg-blue-400"
+              variant="primary"
+              size="md"
+              className="w-full"
             >
               {isLoading ? "ログイン中..." : "ログイン"}
-            </button>
+            </Button>
           </div>
         </Form>
       </div>

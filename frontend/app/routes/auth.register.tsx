@@ -3,6 +3,8 @@ import { Form, Link, useActionData, useNavigation, useNavigate } from "@remix-ru
 import { useAuth } from "~/contexts/auth-context";
 import type { ActionArgs, MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
+import FormInput from "~/components/FormInput";
+import Button from "~/components/Button";
 
 export const meta: MetaFunction = () => {
   return [
@@ -64,20 +66,20 @@ export default function Register() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-12 sm:px-6 lg:px-8">
+    <div className="flex min-h-screen items-center justify-center bg-light-grey px-4 py-12 sm:px-6 lg:px-8">
       <div className="w-full max-w-md space-y-8">
         <div>
           <div className="flex justify-center">
             <img className="h-16 w-auto" src="/logo-light.png" alt="ロゴ" />
           </div>
-          <h2 className="mt-6 text-center text-3xl font-semibold text-gray-900">
+          <h2 className="mt-6 text-center text-h2 text-dark-blue">
             アカウント登録
           </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
+          <p className="mt-2 text-center text-small text-dark-blue/70">
             または{" "}
             <Link
               to="/login"
-              className="font-medium text-blue-600 hover:text-blue-500"
+              className="font-medium text-sky-blue hover:text-sky-blue/80"
             >
               既存アカウントでログイン
             </Link>
@@ -85,11 +87,11 @@ export default function Register() {
         </div>
 
         {error && (
-          <div className="rounded-md bg-red-50 p-4">
+          <div className="rounded-md bg-soft-coral/10 p-4">
             <div className="flex">
               <div className="ml-3">
-                <h3 className="text-sm font-medium text-red-800">エラー</h3>
-                <div className="mt-2 text-sm text-red-700">{error}</div>
+                <h3 className="text-sm font-medium text-soft-coral">エラー</h3>
+                <div className="mt-2 text-sm text-soft-coral/90">{error}</div>
               </div>
             </div>
           </div>
@@ -97,87 +99,61 @@ export default function Register() {
 
         <Form className="mt-8 space-y-6" method="post" onSubmit={handleSubmit}>
           <div className="space-y-4">
-            <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                ユーザー名
-              </label>
-              <input
-                id="name"
-                name="name"
-                type="text"
-                autoComplete="name"
-                required
-                className="mt-1 block w-full rounded-md border-gray-300 py-3 px-4 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                placeholder="ユーザー名"
-              />
-              {errors.name && (
-                <p className="mt-1 text-sm text-red-600">{errors.name}</p>
-              )}
-            </div>
+            <FormInput
+              id="name"
+              name="name"
+              type="text"
+              autoComplete="name"
+              required
+              label="ユーザー名"
+              placeholder="ユーザー名"
+              error={errors.name}
+            />
 
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                メールアドレス
-              </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                autoComplete="email"
-                required
-                className="mt-1 block w-full rounded-md border-gray-300 py-3 px-4 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                placeholder="メールアドレス"
-              />
-              {errors.email && (
-                <p className="mt-1 text-sm text-red-600">{errors.email}</p>
-              )}
-            </div>
+            <FormInput
+              id="email"
+              name="email"
+              type="email"
+              autoComplete="email"
+              required
+              label="メールアドレス"
+              placeholder="メールアドレス"
+              error={errors.email}
+            />
 
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                パスワード
-              </label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                autoComplete="new-password"
-                required
-                className="mt-1 block w-full rounded-md border-gray-300 py-3 px-4 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                placeholder="パスワード"
-              />
-              {errors.password && (
-                <p className="mt-1 text-sm text-red-600">{errors.password}</p>
-              )}
-            </div>
+            <FormInput
+              id="password"
+              name="password"
+              type="password"
+              autoComplete="new-password"
+              required
+              label="パスワード"
+              placeholder="パスワード"
+              error={errors.password}
+            />
 
-            <div>
-              <label htmlFor="password_confirmation" className="block text-sm font-medium text-gray-700">
-                パスワード（確認）
-              </label>
-              <input
-                id="password_confirmation"
-                name="password_confirmation"
-                type="password"
-                autoComplete="new-password"
-                required
-                className="mt-1 block w-full rounded-md border-gray-300 py-3 px-4 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                placeholder="パスワード（確認）"
-              />
-              {errors.password_confirmation && (
-                <p className="mt-1 text-sm text-red-600">{errors.password_confirmation}</p>
-              )}
-            </div>
+            <FormInput
+              id="password_confirmation"
+              name="password_confirmation"
+              type="password"
+              autoComplete="new-password"
+              required
+              label="パスワード（確認）"
+              placeholder="パスワード（確認）"
+              error={errors.password_confirmation}
+            />
           </div>
 
           <div>
-            <button
+            <Button
               type="submit"
               disabled={isLoading}
-              className="group relative flex w-full justify-center rounded-md bg-blue-600 px-4 py-3 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:bg-blue-400"
+              variant="primary"
+              size="md"
+              className="w-full"
             >
               {isLoading ? "登録中..." : "登録"}
-            </button>
+            </Button>
           </div>
         </Form>
       </div>
