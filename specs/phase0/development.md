@@ -1,6 +1,6 @@
 # Phase 0 開発環境構築ガイド
 
-「kagami」SNSプラットフォームのローカル開発環境は、Docker Composeを使用して構築されています。
+SNSプラットフォームのローカル開発環境は、Docker Composeを使用して構築されています。
 
 Docker関連のファイルは以下のように配置されています：
 
@@ -43,9 +43,9 @@ Docker関連のファイルは以下のように配置されています：
 4. **データベース (MariaDB)**
    - MariaDB 10.5
    - ポート: 3306:3306
-   - データベース名: kagami
-   - ユーザー名: kagami
-   - パスワード: kagami_password
+   - データベース名: sns
+   - ユーザー名: sns
+   - パスワード: sns_password
 
 5. **キャッシュ (Redis)**
    - Redis Alpine
@@ -102,7 +102,7 @@ docker-compose down
 
 ## データベース永続化
 
-MySQLのデータは名前付きボリューム `kagami-db-data` に保存され、コンテナを再作成しても保持されます。
+MySQLのデータは名前付きボリューム `sns-db-data` に保存され、コンテナを再作成しても保持されます。
 
 ## ホットリロード
 
