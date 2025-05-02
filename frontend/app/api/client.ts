@@ -1,6 +1,10 @@
 import axios from 'axios';
+import { getLocalStorage } from '~/utils/storage';
 
-const API_URL = process.env.API_URL || 'http://localhost:8000/api';
+// ブラウザ環境で安全に使える形でAPIのURLを定義
+// Remixの環境変数アクセスはサーバーサイドでのみ機能するので、
+// ここではハードコードされた値を使用
+const API_URL = 'http://localhost:8000/api';
 
 const apiClient = axios.create({
   baseURL: API_URL,
@@ -15,7 +19,7 @@ const apiClient = axios.create({
 apiClient.interceptors.request.use(
   (config) => {
     // トークンがローカルストレージにある場合はヘッダーに追加
-    const token = localStorage.getItem('auth_token');
+    const token = getLocalStorage('auth_token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -32,13 +36,7 @@ apiClient.interceptors.response.use(
     return response;
   },
   (error) => {
-    // 401エラー（認証エラー）の場合
-    if (error.response && error.response.status === 401) {
-      // トークンを削除
-      localStorage.removeItem('auth_token');
-      // ログインページにリダイレクト（実装予定）
-      // window.location.href = '/login';
-    }
+    // エラー処理
     return Promise.reject(error);
   }
 );

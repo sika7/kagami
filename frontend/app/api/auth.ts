@@ -1,4 +1,5 @@
 import apiClient from './client';
+import { setLocalStorage, removeLocalStorage } from '~/utils/storage';
 
 export interface RegisterParams {
   name: string;
@@ -34,7 +35,7 @@ export const register = async (data: RegisterParams): Promise<AuthResponse> => {
     const response = await apiClient.post<AuthResponse>('/auth/register', data);
     
     if (response.data.token) {
-      localStorage.setItem('auth_token', response.data.token);
+      setLocalStorage('auth_token', response.data.token);
     }
     
     return response.data;
@@ -52,7 +53,7 @@ export const login = async (data: LoginParams): Promise<AuthResponse> => {
     const response = await apiClient.post<AuthResponse>('/auth/login', data);
     
     if (response.data.token) {
-      localStorage.setItem('auth_token', response.data.token);
+      setLocalStorage('auth_token', response.data.token);
     }
     
     return response.data;
@@ -81,7 +82,8 @@ export const getCurrentUser = async (): Promise<User> => {
 export const logout = async (): Promise<void> => {
   try {
     await apiClient.post('/auth/logout');
-    localStorage.removeItem('auth_token');
+    removeLocalStorage('auth_token');
+    removeLocalStorage('auth_user');
   } catch (error) {
     console.error('Logout error:', error);
     throw error;

@@ -9,6 +9,8 @@ import {
   type LoginParams, 
   type RegisterParams 
 } from '../api/auth';
+import { getLocalStorage, setLocalStorage, removeLocalStorage } from '~/utils/storage';
+import { isBrowser } from '~/utils/storage';
 
 interface AuthContextType {
   user: User | null;
@@ -21,36 +23,62 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+/**
+ * ローカルストレージからユーザー情報を取得する
+ */
+const getUserFromStorage = (): User | null => {
+  if (!isBrowser()) return null;
+  
+  try {
+    const userJson = getLocalStorage('auth_user');
+    return userJson ? JSON.parse(userJson) : null;
+  } catch (e) {
+    console.error('Error parsing user from storage:', e);
+    return null;
+  }
+};
+
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
+  // 初期状態としてローカルストレージから直接ユーザー情報を取得
+  const [user, setUser] = useState<User | null>(getUserFromStorage());
   const queryClient = useQueryClient();
+
+  // ブラウザの場合のみトークンチェック
+  const hasToken = isBrowser() ? !!getLocalStorage('auth_token') : false;
 
   // 現在のユーザー情報を取得するクエリ
   const { data: userData, isLoading } = useQuery({
     queryKey: ['currentUser'],
     queryFn: getCurrentUser,
-    // Tokenがない場合はリクエストしない
-    enabled: !!localStorage.getItem('auth_token'),
-    retry: false,
+    // Tokenがある場合かつブラウザ環境でのみ実行
+    enabled: hasToken,
+    retry: 1,
+    staleTime: 1000 * 60, // 1分間はキャッシュを使用
+    onSuccess: (fetchedUser) => {
+      // APIから取得したユーザー情報を保存
+      setUser(fetchedUser);
+      if (isBrowser()) {
+        setLocalStorage('auth_user', JSON.stringify(fetchedUser));
+      }
+    },
     onError: () => {
       // エラー時は認証情報をクリア
-      localStorage.removeItem('auth_token');
+      if (isBrowser()) {
+        removeLocalStorage('auth_token');
+        removeLocalStorage('auth_user');
+      }
       setUser(null);
     }
   });
-
-  // ユーザーデータが変更されたらステートを更新
-  useEffect(() => {
-    if (userData) {
-      setUser(userData);
-    }
-  }, [userData]);
 
   // ログイン処理
   const loginMutation = useMutation({
     mutationFn: loginApi,
     onSuccess: (data) => {
       setUser(data.user);
+      if (isBrowser()) {
+        setLocalStorage('auth_user', JSON.stringify(data.user));
+      }
       queryClient.invalidateQueries({ queryKey: ['currentUser'] });
     }
   });
@@ -60,6 +88,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     mutationFn: registerApi,
     onSuccess: (data) => {
       setUser(data.user);
+      if (isBrowser()) {
+        setLocalStorage('auth_user', JSON.stringify(data.user));
+      }
       queryClient.invalidateQueries({ queryKey: ['currentUser'] });
     }
   });
@@ -69,6 +100,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     mutationFn: logoutApi,
     onSuccess: () => {
       setUser(null);
+      if (isBrowser()) {
+        removeLocalStorage('auth_user');
+      }
       queryClient.invalidateQueries({ queryKey: ['currentUser'] });
     }
   });
