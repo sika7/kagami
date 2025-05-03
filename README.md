@@ -31,7 +31,7 @@
 ## 技術スタック
 
 - **バックエンド**: Laravel (PHP 8.x)
-- **フロントエンド**: React with Remix (TypeScript)
+- **フロントエンド**: React with Next.js (TypeScript) ※初期フェーズはSPAモードで使用
 
 ## 開発環境セットアップ
 
@@ -44,7 +44,7 @@ php artisan migrate
 php artisan serve
 ```
 
-### フロントエンド (Remix)
+### フロントエンド (Next.js)
 
 ```bash
 cd frontend

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Structure
 - Backend: Laravel PHP framework (PHP 8.2+)
-- Frontend: React with Remix and TypeScript
+- Frontend: React with Next.js and TypeScript (using SPA mode for initial phase)
 
 ## Build/Test Commands
 ### Backend (Laravel)
@@ -15,7 +15,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `cd backend && php artisan migrate` - Run database migrations
 - `cd backend && ./vendor/bin/pint` - Run PHP code style fixer
 
-### Frontend (Remix)
+### Frontend (Next.js)
 - `cd frontend && npm run dev` - Start development server
 - `cd frontend && npm run build` - Build for production
 - `cd frontend && npm run lint` - Run ESLint

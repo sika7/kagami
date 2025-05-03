@@ -11,7 +11,7 @@
 flowchart TD
     Browser["Web Browser\n(エンドユーザー/管理者インターフェース)"]
     CDN["CDN\n(将来的に導入)"]
-    Frontend["フロントエンドアプリケーション\n(Remix + React + TypeScript)"]
+    Frontend["フロントエンドアプリケーション\n(Next.js + React + TypeScript)\n※初期フェーズはSPAモード"]
     Backend["バックエンドAPI\n(Laravel)"]
     DB["データベース\n(MariaDB)"]
     External["外部サービス\n- 翻訳サービス\n- 学術検索エンジン\n- ファクトチェック"]
@@ -245,6 +245,7 @@ erDiagram
 1. **フロントエンドキャッシュ**
 
    - React Query を使用したクライアントサイドキャッシング
+   - Next.js の組み込みキャッシング機能の活用
    - Service Worker によるオフラインサポート（将来的に導入）
 
 2. **バックエンドキャッシュ**
@@ -1143,7 +1144,7 @@ classDiagram
 
 ### フロントエンド
 
-    * Remix (Reactフレームワーク)
+    * Next.js (Reactフレームワーク) - 初期フェーズはSPAモードで構築
     * React
     * Ant Design (ReactのUIコンポーネントライブラリ)
     * TypeScript
