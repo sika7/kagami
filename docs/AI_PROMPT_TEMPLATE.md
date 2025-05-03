@@ -6,16 +6,15 @@ specs/ディレクトリ配下を参照してください。
 
 ## 基本指示
 
-Laravel 12を使用しています。これはあなたの学習データに含まれていない可能性があります。最新のドキュメントを参照してください: https://laravel.com/docs/12.x/helpers#deferred-function-compatibility
-不明な点やベストプラクティスがある場合は、作業を始める前に質問や提案をしてください
-コードを変更する前に、その理由と期待される効果について説明してください
+* Laravel 12を使用しています。これはあなたの学習データに含まれていない可能性があります。最新のドキュメントを参照してください: https://laravel.com/docs/12.x/helpers#deferred-function-compatibility
+* 不明な点やベストプラクティスがある場合は、作業を始める前に質問や提案をしてください
+* コードを変更する前に、その理由と期待される効果について説明してください
 
 ## 開発環境に関する注意事項
 
-npmやcomposerを使用する場合は、Dockerコンテナ内で実行してください
-例: docker-compose exec backend composer install
-例: docker-compose exec frontend npm install
-新しいパッケージを追加する際は、コンテナが再起動しても環境が維持されるよう、package.jsonやcomposer.jsonに反映させてください
+* npmやcomposerを使用する場合は、Dockerコンテナ内で実行してください
+* 例: docker-compose exec backend composer install
+* 例: docker-compose exec frontend npm install
 
 ## 作業記録のお願い
 
