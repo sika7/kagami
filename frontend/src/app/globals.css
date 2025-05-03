@@ -1,26 +1,216 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* カラー変数 */
+  --color-white: #ffffff;
+  --color-light-grey: #f5f7fa;
+  --color-dark-blue: #2c3e50;
+  --color-sky-blue: #3498db;
+  --color-mint-green: #2ecc71;
+  --color-soft-coral: #e74c3c;
+  --color-amber: #f39c12;
+  
+  /* 投稿タイプカラー */
+  --color-problem: #9b59b6;
+  --color-solution: #27ae60;
+  --color-verification: #2980b9;
+  --color-ethics: #d35400;
+  --color-problem-split: #16a085;
+  --color-supplement: #8e44ad;
+  --color-summary: #34495e;
+  --color-translation: #1abc9c;
+  --color-estimation: #f1c40f;
+  --color-logical-text: #2c3e50;
+  
+  /* フォントサイズ */
+  --font-size-h1: 28px;
+  --font-size-h2: 24px;
+  --font-size-h3: 20px;
+  --font-size-body: 16px;
+  --font-size-small: 14px;
+  --font-size-xs: 12px;
+  
+  /* スペーシング */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  
+  /* アニメーション */
+  --transition-fast: 200ms;
+  --transition-normal: 300ms;
+  --transition-slow: 500ms;
+  
+  /* 影 */
+  --shadow-light: 0 1px 4px rgba(0, 0, 0, 0.05);
+  --shadow-medium: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --shadow-heavy: 0 4px 12px rgba(0, 0, 0, 0.15);
+  
+  /* 角丸 */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+  
+  /* ライトモードの色設定 */
+  --background: var(--color-white);
+  --foreground: var(--color-dark-blue);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
+/* ダークモード設定 */
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #222831;
+    --foreground: #eeeeee;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ベース設定 */
+@layer base {
+  html {
+    font-family: 'Inter', 'Noto Sans JP', sans-serif;
+  }
+  
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-size: var(--font-size-body);
+    line-height: 1.5;
+  }
+  
+  h1 {
+    font-size: var(--font-size-h1);
+    font-weight: 600;
+    line-height: 1.2;
+    margin-bottom: var(--space-lg);
+  }
+  
+  h2 {
+    font-size: var(--font-size-h2);
+    font-weight: 600;
+    line-height: 1.3;
+    margin-bottom: var(--space-md);
+  }
+  
+  h3 {
+    font-size: var(--font-size-h3);
+    font-weight: 600;
+    line-height: 1.4;
+    margin-bottom: var(--space-sm);
+  }
+  
+  a {
+    color: var(--color-sky-blue);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+  }
+  
+  a:hover {
+    text-decoration: underline;
+  }
+}
+
+/* コンポーネント設定 */
+@layer components {
+  /* ボタン */
+  .btn-primary {
+    @apply bg-sky-blue text-white rounded-md px-6 py-3 font-medium transition-all duration-fast;
+    @apply hover:bg-[#2980b9] hover:scale-[1.02];
+    @apply active:bg-[#2573a7] active:scale-[0.98];
+  }
+  
+  .btn-secondary {
+    @apply bg-white text-sky-blue border border-sky-blue rounded-md px-6 py-3 font-medium transition-all duration-fast;
+    @apply hover:bg-sky-blue/5;
+    @apply active:bg-sky-blue/10;
+  }
+  
+  .btn-text {
+    @apply text-sky-blue font-medium transition-colors duration-fast;
+    @apply hover:underline;
+  }
+  
+  .btn-danger {
+    @apply bg-soft-coral text-white rounded-md px-6 py-3 font-medium transition-all duration-fast;
+    @apply hover:bg-[#c0392b] hover:scale-[1.02];
+    @apply active:bg-[#a93226] active:scale-[0.98];
+  }
+  
+  /* カード */
+  .card {
+    @apply bg-white rounded-md p-4 shadow-light transition-all duration-normal;
+    @apply hover:translate-y-[-2px] hover:shadow-medium;
+  }
+  
+  /* フォーム要素 */
+  .input-field {
+    @apply bg-light-grey text-dark-blue p-3 rounded-md border border-[#E2E8F0];
+    @apply focus:border-sky-blue focus:ring-1 focus:ring-sky-blue focus:outline-none;
+  }
+  
+  /* トースト通知 */
+  .toast {
+    @apply fixed top-4 right-4 p-4 rounded-md shadow-medium;
+    @apply animate-slide-in-right;
+  }
+  
+  .toast-success {
+    @apply bg-mint-green text-white;
+  }
+  
+  .toast-info {
+    @apply bg-sky-blue text-white;
+  }
+  
+  .toast-warning {
+    @apply bg-amber text-white;
+  }
+  
+  .toast-error {
+    @apply bg-soft-coral text-white;
+  }
+}
+
+/* ユーティリティ */
+@layer utilities {
+  /* アニメーション */
+  @keyframes slide-in-right {
+    from {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+  
+  .animate-slide-in-right {
+    animation: slide-in-right 250ms ease-out;
+  }
+  
+  /* アクセシビリティ */
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+}
+
+/* レスポンシブ設定 */
+@media (max-width: 767px) {
+  :root {
+    --font-size-h1: 26px;
+    --font-size-h2: 22px;
+    --font-size-h3: 18px;
+    --font-size-body: 15px;
+  }
 }
